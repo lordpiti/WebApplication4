@@ -12,6 +12,8 @@ namespace WebApplication4
     {
         public static void Main(string[] args)
         {
+            var a = "";
+
             var host = new WebHostBuilder() 
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
