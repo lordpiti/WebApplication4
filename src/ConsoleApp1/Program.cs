@@ -1,55 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-using RestSharp;
-using System.Threading;
-using System.Net.Http;
-using RabbitMQ.Client;
-using System.Text;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebApplication4
+namespace ConsoleApp1
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            //// Start a thread that calls a parameterized static method.
-            Thread newThread = new Thread(DoWork);
-            newThread.Start(42);
-
-            var host = new WebHostBuilder() 
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
-
-            host.Run();
-        }
-
-        public static void DoWork(object data)
-        {
-            //while (true)
-            //{
-            //    var apiUrl = "http://mockbin.org/bin/2296f131-2992-4374-9af8-5f45ee5e4aee?foo=bar&foo=baz";
-            //    HttpClient client = new HttpClient();
-
-            //    var task = Task.Run(() => client.GetAsync(apiUrl));
-            //    var aa = task.Result;
-            //}
-
-            SendMessage("Pablo knows");
-            SendMessage("Manny doesn't know");
+            SendMessage("Piti sabe");
+            SendMessage("Manny no sabe");
 
             GetMessages();
-
         }
-
 
         public static void SendMessage(string message)
         {
@@ -84,15 +51,16 @@ namespace WebApplication4
                                      exclusive: false,
                                      autoDelete: false,
                                      arguments: null);
-                var jaja = "";
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += (model, ea) =>
                 {
                     var body = ea.Body;
                     var message = Encoding.UTF8.GetString(body);
+                    Console.WriteLine(message);
                 };
                 var a = channel.BasicConsume(queue: "hello",
                                      noAck: true, consumer: consumer);
+                Console.ReadLine();
             }
         }
     }
